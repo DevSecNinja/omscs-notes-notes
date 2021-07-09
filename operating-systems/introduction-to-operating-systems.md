@@ -129,7 +129,7 @@ Hardware access can only be utilized in the kernel mode from the OS directly.
 
 Crossing from user-level to kernel-level is supported by most modern operating systems.
 
-As an example, the operating system can flip a bit in the CPU that allows applications executing instructions to have direct access to hardware resources. When the bit is not flipped, operations are forbidden.
+As an example, the operating system can flip a bit in the CPU that allows applications executing instructions to have direct access to hardware resources. When the bit is not flipped, operations are forbidden. (Privilege bit)
 
 When privileged instructions are encountered during a non-privileged execution, the application will be **trapped**. This means the application's execution will be interrupted, and control will be handed back to the OS.
 
@@ -213,6 +213,9 @@ This makes the operating system potentially very large.
 * Not too portable/manageable
 * Large memory footprint (which can impact performance)
 
+#### Examples (not mentioned in lecture)
+* Traditional Unix kernels, MS-DOS
+
 ## Modular OS
 
 This type of operating system has a basic set of services and APIs that come with it.
@@ -233,6 +236,9 @@ Dynamically install new modules in the operating system!
 
 * All the modularity/indirection can reduce some opportunities for optimization (but eh, not really)
 * Maintenance can still be an issue as modules from different codebases can be slung together at runtime
+
+#### Examples (not mentioned in lecture)
+* Linux Modern OS, BSD
 
 ## Microkernel
 
@@ -255,6 +261,9 @@ As a result, the microkernel often supports IPC as a core abstraction.
 * Harder to find common OS components due to specialized use case
 * Expensive cost of frequent user/kernel crossing
 
+#### Examples (not mentioned in lecture)
+* Windows NT
+
 ## Linux and Mac OS Architecture
 
 ### Linux
@@ -274,6 +283,8 @@ Kernel consist of several logical components
 * Process management
 
 Each subcomponent within the three above can be modified or replaced 'cause modularity!
+
+![](https://omscsnotes.blob.core.windows.net/images/msedge_d88pW7Z7rZ.png)
 
 ### Mac OS X
 
