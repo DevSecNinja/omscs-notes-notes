@@ -8,7 +8,7 @@ lecture: processes-and-process-management
 # Processes and Process Management
 
 ## What is a Process?
-One of the roles of the operating system is to manage the hardware on behalf of **applications**. When an application is stored on disk, it is static. Once an application is launched, it is loaded into memory and starts executing; it becomes a **process**. A process is an active entity.
+One of the roles of the operating system is to manage the hardware on behalf of **applications**. When an application is stored on disk, it is static. Once an application is launched, it is loaded into memory and starts executing; it becomes a **process**. A process is an **active entity**.
 
 If the same program is launched more than once, multiple processes will be created. They will have the same instructions, but very different state.
 
