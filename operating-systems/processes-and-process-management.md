@@ -105,7 +105,7 @@ When a process is created, it is in the *new* state. This is when the OS perform
 ![](https://assets.omscs.io/notes/E65850CD-7381-48DB-A3AB-6E2A386428CD.png)
 
 ## Process Life Cycle: Creation
-In operating systems, a process can create one or more *child processes*. The creating process is the parent and the created process is the child. All of the processes that are currently loaded will exist in a tree-like hierarchy. E.g. when a user logs in, the *csh* process will be created based on the *init* process: **the parent of all processes**. When a user runs *ls*, it will be a child process of the *csh* process.
+In operating systems, a process can create one or more *child processes*. The creating process is the parent and the created process is the child. All of the processes that are currently loaded will exist in a tree-like hierarchy. E.g. when a user logs in, the **csh** process will be created based on the **init** process: **the parent of all processes**. When a user runs `ls`, it will be a child process of the **csh** process.
 
 ![](https://omscsnotes.blob.core.windows.net/images/0CD39296BC42E0C0242ABFDB5E9D42D5D5A80AD59ED2FF5A2DD8D72CF0EBC726.png)
 
