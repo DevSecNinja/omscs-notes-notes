@@ -79,7 +79,7 @@ We need some data structure to represent a thread. The information we need to de
 * Stack
 * Other attributes (priority attributes, etc.)
 
-To create a thread, think of a `fork` (not the UNIX fork) call which takes two arguments - the `proc` to run when the thread is created, and the `args` to pass to `proc`.
+To create a thread, think of a `fork` (not the UNIX fork) call which takes two arguments - the `proc` to run when the thread is created, and the `args` to pass to `proc`. Remember that this `fork` is used to create a thread, well the UNIX fork is used to create a copy of a process.
 
 When one thread calls `fork` a new thread is created, with a new data structure and its program counter pointing to the first argument of `proc`.
 
@@ -297,7 +297,7 @@ This is where the problem lies. T2 will not be able to lock the mutex for A, bec
 
 How can we avoid these situations?
 
-One solution would be to unlock A before locking B. However, this solution will not work in this scenario since we need access to both A and B.
+One solution would be to unlock A before locking B. This is called *fine-grained locking*. However, this solution will not work in this scenario since we need access to both A and B.
 
 Another solution would be to get all locks up front, and then release all of them at the end. This solution may work for some applications, but may be too restrictive for others, because it limits the amount of parallelism that can exist in the system.
 
@@ -309,7 +309,9 @@ We can try to prevent deadlocks. Each time a thread is about to acquire a mutex,
 
 Alternatively, we can try to detect deadlocks and recover from them. We can accomplish this through analysis of the wait graph and trying to determine whether any cycles have occurred. This is still an expensive operation as it requires us to have a rollback strategy in the event that we need to recover.
 
-We can also apply the ostrich algorithm by doing nothing! We can hope that the system never deadlocks, and if we are wrong we can just reboot.
+We can also apply the Ostrich algorithm by doing nothing! We can hope that the system never deadlocks, and if we are wrong we can just reboot.
+
+![](https://omscsnotes.blob.core.windows.net/images/3A5AFDA205BF84699B05D5B7DD79470BC832AF1533F761411F6DC9FCDB771AA1.png)
 
 ## Kernel Vs. User-Level Threads
 Kernel level threads imply that the operating system itself is multithreaded.  Kernel level threads are visible to the kernel and are managed by kernel level components like the kernel level scheduler.  The operating system scheduler will determine how these threads will be mapped onto the underlying physical CPU(s) and which ones will execute at any given point.
@@ -326,14 +328,14 @@ In this model, each user level thread has a kernel level thread associated with 
 
 This means that the operating system can see the user level threads. It understands that the process is multithreaded, and it also understands what those threads need. Since the operating system already supports threading mechanisms to manage its thread, the user libraries can benefit directly from the multithreading support available in the kernel.
 
-One downside of this approach is that is it expensive: for every operation we must go to the kernel and pay the cost of a system call. Another downside is that since we are relying on the mechanisms and policies supported by the kernel, we are limited to only those policies and mechanisms. As well, execution of our applications on different operating systems may give different results.
+One downside of this approach is that it is **expensive**: for every operation we must go to the kernel and pay the cost of a system call. Another downside is that since we are relying on the mechanisms and policies supported by the kernel, we are limited to only those policies and mechanisms. As well, execution of our applications on different operating systems may give different results.
 
 ### Many-to-One Model
 In this model, all of the user level threads for a process are mapped onto a single kernel level thread. At the user level, there is a thread management library to make decisions about which user level thread to map onto the kernel level thread at any given point in time. That user level thread will still only run once that kernel level thread is scheduled on the CPU by the kernel level scheduler.
 
-The benefit of this approach is that it is portable. Everything is done at the user level, which frees us from being reliant on the OS limits and policies. As well as, we don't have to make system calls for any thread-related decisions.
+The benefit of this approach is that it is **portable**. Everything is done at the user level, which frees us from being reliant on the OS limits and policies. As well as, we don't have to make system calls for any thread-related decisions.
 
-However, the operating system loses its insight into application needs. It doesn't even know that the process is multithreaded. All it sees is one kernel level thread. If the user level library schedules a thread that performs some blocking operation, the OS will place the associated kernel level thread onto some request queue, which will end up blocking the entire process, even though more work can potentially be done.
+However, the **operating system loses its insight** into application needs. It doesn't even know that the process is multithreaded. All it sees is one kernel level thread. If the user level library schedules a thread that performs some blocking operation, the OS will place the associated kernel level thread onto some request queue, which will end up blocking the entire process, even though more work can potentially be done.
 
 ### Many-to-Many Model
 This model allows for some user threads to have a one-to-many relationship with a kernel thread, while allowing other user threads to have a one-to-one relationship with a kernel thread.
@@ -375,6 +377,8 @@ Another option is to establish a queue between the boss and the workers, similar
 The positive of this approach is that the boss doesn't need to know any of the details about the workers. It just places the work it accepts on the queue and moves on. Whenever a worker becomes free it just looks at the front of the queue and retrieves the next item.
 
 The downside of this approach is that further synchronization is required, both for the boss producing to the queue, and the workers competing amongst one another to consume from the queue. Despite this downside, this approach still results in decreased work for the boss for each task, which increases the throughput for the whole system.
+
+![](https://omscsnotes.blob.core.windows.net/images/8B7CA3547CAE04EE4FC97DE646A742C6041FEF3090CB02CFBCCF6E78AC547AF0.png)
 
 #### How many workers?
 If the work queue fills up, the boss cannot add items to the queue, and the amount of time that the boss has to spend per task increases. The likelihood of the queue filling up is dependent primarily on the number of workers.
