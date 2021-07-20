@@ -6,6 +6,8 @@ lecture: threads-case-study-pthreads
 ---
 
 # Threads Case Study - PThreads
+## PThreads
+PThreads is short for POSIX Threads while POSIX means *Portable Operating System Interface*. It's intend is to increase interoperability between threads. PThreads specifies the syntax and semantics of the operations.
 
 ## PThread Creation
 To represent threads, pthreads supports a `pthread_t` data type. Variables of this type will be uniquely identified by an identifier and will describe a thread.
